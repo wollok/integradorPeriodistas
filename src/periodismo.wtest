@@ -1,0 +1,110 @@
+import periodismo.*
+
+describe "pruebas" {
+	
+const anaKonda = new Rebelde(estrategia = pbiPerCapita)
+const estrategias = [pbiPerCapita, gini, accesoUniversidad]
+
+const eeuu = new Pais(
+	nombre = "Estados Unidos",
+	porcentajeUniversitario = 95,
+	ingresos = [5000, 10000, 14000, 16000, 19000, 26000, 30000, 38000, 50000, 100000],
+	poblacion = 300000000,
+	pbi = 999999999
+)
+
+const madagascar = new Pais(
+	nombre = "Madagascar",
+	porcentajeUniversitario = 5,
+	ingresos = [1000, 1200, 1300, 1400, 1500, 1600, 1605, 1610, 1615, 1620],
+	poblacion = 5000000,
+	pbi = 10000000
+)
+
+const colombia = new Pais(
+	nombre = "Colombia",
+	porcentajeUniversitario = 40,
+	ingresos = [4300, 10000, 12000, 15000, 20000, 22000, 30000, 35000, 45000, 85000],
+	poblacion = 20000000,
+	pbi = 250000000
+)
+
+const bolivia = new Pais(
+	nombre = "Bolivia",
+	porcentajeUniversitario = 25,
+	ingresos = [4000, 9000, 11000, 12000, 15000, 20000, 22000, 30000, 35000, 50000],
+	poblacion = 15000000,
+	pbi = 120000000
+)
+
+const ecuador = new Pais(
+	nombre = "Ecuador",
+	porcentajeUniversitario = 55,
+	ingresos = [4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 100000],
+	poblacion = 17500000,
+	pbi = 175000000
+)
+
+const suecia = new Pais(
+	nombre = "Suecia",
+	porcentajeUniversitario = 90,
+	ingresos = [5500, 10500, 14500, 16500, 19500, 26500, 35000, 38500, 55000, 150000],
+	poblacion = 50000000,
+	pbi = 900000000
+)
+
+const noruega = new Pais(
+	nombre = "Noruega",
+	porcentajeUniversitario = 92,
+	ingresos = [6500, 12500, 15500, 18500, 22500, 28500, 37000, 40500, 75000, 90000],
+	poblacion = 45000000,
+	pbi = 850000000
+)
+
+const estebanQuito = new Panqueque(
+ 	nombre = "Esteban Quito", 
+ 	simpatia = [colombia, ecuador, bolivia, argentina],
+ 	estrategiaPositiva = accesoUniversidad,
+ 	estrategiaNegativa = gini
+ )
+ 
+ const soniaDora = new Panqueque(
+ 	nombre = "Sonia Dora",
+ 	simpatia = [noruega, suecia],
+ 	estrategiaPositiva = ingresosAltos,
+ 	estrategiaNegativa = nombrista
+ )
+
+fixture {
+	mundo.agregarPais(eeuu)
+	mundo.agregarPais(madagascar)
+}
+
+test "Todas las cifras en argetina" {
+	assert.equals([500000000/43000000,  87758 / 4290, 50], argentina.situacionEconomica(estrategias))
+}
+
+test "Todas las cifras en eeu" {
+	
+	assert.equals([999999999/300000000, 100000 / 5000, 95], eeuu.situacionEconomica(estrategias)  )
+}
+
+test "mejor pais en acceso universidad"{
+	assert.equals(eeuu,mundo.mejorPais(accesoUniversidad))
+}
+
+test "mejor pais en gini"{
+	assert.equals(argentina,mundo.mejorPais(gini))
+}
+
+test "Analista cambia de estrategia" {
+	const articulo1 = anaKonda.escribirArticulo(argentina)
+	anaKonda.estrategia(accesoUniversidad)
+	const articulo2 = anaKonda.escribirArticulo(argentina)
+	assert.that(articulo1.cifraDestacada() != articulo2.cifraDestacada())
+	assert.that(articulo1.analista() == articulo2.analista())
+	// Mismo autor pero articulos diferentes
+}
+
+}
+
